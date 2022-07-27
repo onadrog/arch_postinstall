@@ -1,0 +1,13 @@
+{
+   "name": "Customs snippets",
+   "contributes": {
+      "snippets": [
+         {
+            "language": [
+               "php"
+            ],
+            "path": "./php.json"
+         }
+      ]
+   }
+}

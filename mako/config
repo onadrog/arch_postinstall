@@ -1,0 +1,14 @@
+border-radius=3
+default-timeout=3000
+padding=15
+background-color=#434c5e99
+border-size=0
+font=Hack Regular 10
+
+[app-name=Brave]
+invisible=1
+ignore-timeout=1
+
+[urgency=high]
+border-size=2
+border-color=#BF616A

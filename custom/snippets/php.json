@@ -1,0 +1,21 @@
+{
+"php tag + declare strict": {
+		"prefix": "phpd",
+		"body": [
+			"<?php\n",
+			"declare(strict_types=1);"
+		],
+		"description": "Insert php tag and declare strict_types"
+	},
+	"lazyMan": {
+		"prefix": "lzph",
+		"body": [
+			"<?php\n",
+			"declare(strict_types=1);\n",
+			"namespace $0;\n",
+			"/**\n* @author Sébastien Gordano <sebastien.gordano@gmail.com>\n*/\n"
+		],
+		"description": "Starter lazy template"
+
+        }
+}

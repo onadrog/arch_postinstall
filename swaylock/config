@@ -1,0 +1,8 @@
+color=#2E3440
+indicator-thickness=20
+inside-ver-color=#434C5E
+text-color=#ECEFF4
+ring-wrong-color=#BF616A
+line-wrong-color=#BF616A
+show-keyboard-layout
+ignore-empty-password
