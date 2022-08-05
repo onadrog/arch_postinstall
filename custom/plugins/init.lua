@@ -25,6 +25,6 @@ return {
     end,
   },
 
-  ["ellisonleao/glow.nvim"]={}
+--  ["ellisonleao/glow.nvim"]={}
 
  }
