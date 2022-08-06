@@ -28,10 +28,10 @@ sudo pacman -Syu --noconfirm && \
     playerctl neovim reflector \
     cups docker docker-compose fstrim \
     ufw keepassxc swaylock swayidle \
-    base-devel zsh nodejs npm yarn \
+    base-devel zsh nodejs npm pnpm \
     alacritty pcmanfm waybar swaybg \
     clipman otf-font-awesome gammastep \
-    upower
+    upower github-cli dnscrypt-proxy
 
 #############################################
 #             INSTALL AUR HELPER            #
@@ -55,23 +55,33 @@ do
     break ;
 done
 
+
+#############################################
+#               DNSCRYPT SERVICES           #
+#############################################
+
+echo "nameserver 127.0.0.1\nnameserver ::1\noptions edns0" > /etc/resolv.conf
+
+sudo chattr +i /etc/resolv.conf
+
 #############################################
 #               SYSTEMD SERVICES            #
 #############################################
 
 echo "Enabling systemd services..."
 
-systemctl enable reflector.timer cups.service fstrim.service docker.service ufw.service NetworkManager.service
+systemctl enable reflector.timer cups.service fstrim.service docker.service ufw.service NetworkManager.service dnscrypt-proxy.service
 
 if [ $is_laptop == "Yes" ];
 then
   systemctl enable tlp upower
 fi
+
 #############################################
 #                CONF SHELL                 #
 #############################################
 
-echo "alias clean='sudo pacman -Qtdq | sudo pacman -Rns -'\nexport EDITOR='nvim'" > ~/.zshrc
+echo "alias clean='sudo pacman -Qtdq | sudo pacman -Rns -'\nexport EDITOR='nvim'" >> ~/.zshrc
 
 chsh -s /usr/bin/zsh
 autoload -Uz zsh-newuser-install
