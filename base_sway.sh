@@ -50,7 +50,7 @@ do
     cd
     $opt -Y --gendb
     $choice -Syu --devel
-    $choice -S --noconfirm brave ly bemenu-dmenu nerd-fonts-fira-code greetd gtkgreet
+    $choice -S --noconfirm brave bemenu-dmenu nerd-fonts-fira-code greetd gtkgreet
     echo "$opt installed"
     break ;
 done
