@@ -13,6 +13,7 @@ M.treesister = {
     "php",
     "phpdoc",
     "scss",
+    "typescript",
     "yaml",
     "go"
   }
@@ -26,11 +27,11 @@ M.mason = {
     "intelephense",
     "css-lsp",
     "yaml-language-server",
-    "jsonls",
+    "json-lsp",
     "lemminx",
     "marksman",
     "gopls",
-    "tsserver"
+    "typescript-language-server"
   }
 }
 
@@ -48,6 +49,9 @@ M.nvimtree = {
          },
       },
    },
+  view = {
+    side = "right"
+  }
 }
 
 M.luasnip = {

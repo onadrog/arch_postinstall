@@ -1,3 +1,5 @@
+local override = require "custom.override"
+
 return {
 
    ["jose-elias-alvarez/null-ls.nvim"] = {
@@ -9,6 +11,10 @@ return {
 
   ["goolord/alpha-nvim"] = {
       disable = false,
+  },
+
+  ["folke/which-key.nvim"] = {
+    disable = false,
   },
 
   ["L3MON4D3/LuaSnip"] = {
@@ -24,7 +30,9 @@ return {
       require "custom.plugins.lspconfig"
     end,
   },
+  ["kyazdani42/nvim-tree.lua"] ={ override_options = override.nvimtree} ,
+  ["nvim-treesitter/nvim-treesitter"] = {override_options = override.treesitter},
+  ["williamboman/mason.nvim"] = { override_options = override.mason},
 
---  ["ellisonleao/glow.nvim"]={}
 
  }

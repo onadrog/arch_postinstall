@@ -7,9 +7,8 @@ end
 local b = null_ls.builtins
 
 local sources = {
-        b.formatting.prettierd,
+        b.formatting.prettier,
         b.formatting.xmllint,
-        --b.diagnostics.golangci_lint,
         b.formatting.phpcsfixer,
         b.formatting.gofumpt,
         b.formatting.djlint.with({
