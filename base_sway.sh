@@ -44,13 +44,13 @@ options=("yay" "paru")
 select opt in "${options[@]}"
 do
     echo "Installing $opt helper"
-    git clone https://aur.archlinux.org/${opt}.git
-    cd $opt
-    makepkg -si;;
-    cd
+    git clone https://aur.archlinux.org/"${opt}".git
+    cd "$opt" || exit
+    makepkg -si;
+    cd || exit
     $opt -Y --gendb
-    $choice -Syu --devel
-    $choice -S --noconfirm brave bemenu-dmenu nerd-fonts-fira-code greetd gtkgreet
+    $opt -Syu --devel
+    $opt -S --noconfirm brave bemenu-dmenu nerd-fonts-fira-code greetd gtkgreet
     echo "$opt installed"
     break ;
 done
@@ -60,9 +60,11 @@ done
 #               DNSCRYPT SERVICES           #
 #############################################
 
-echo "nameserver 127.0.0.1\nnameserver ::1\noptions edns0" > /etc/resolv.conf
 
-sudo chattr +i /etc/resolv.conf
+sudo printf "nameserver 127.0.0.1
+nameserver ::1
+options edns0
+" | tee /etc/resolv.conf && chattr +i /etc/resolv.conf
 
 #############################################
 #               SYSTEMD SERVICES            #
@@ -72,7 +74,7 @@ echo "Enabling systemd services..."
 
 systemctl enable reflector.timer cups.service fstrim.service docker.service ufw.service NetworkManager.service dnscrypt-proxy.service
 
-if [ $is_laptop == "Yes" ];
+if [ "$is_laptop" == "Yes" ];
 then
   systemctl enable tlp upower
 fi
@@ -81,7 +83,9 @@ fi
 #                CONF SHELL                 #
 #############################################
 
-echo "alias clean='sudo pacman -Qtdq | sudo pacman -Rns -'\nexport EDITOR='nvim'" >> ~/.zshrc
+printf "alias clean='sudo pacman -Qtdq | sudo pacman -Rns -'
+export EDITOR='nvim'
+" >> ~/.bashrc
 
 chsh -s /usr/bin/zsh
 autoload -Uz zsh-newuser-install
@@ -90,17 +94,10 @@ zsh-newuser-install -f
 echo "Zsh configured"
 
 #############################################
-#                DOWNLOAD NvChad            #
-#############################################
-
-git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
-
-#############################################
 #            COPY CONF FILES                #
 #############################################
 
-ln -rs * .config
-ln -rs custom .config/nvim/lua
+rsync --exclude=*.sh --exclude=README -avzc ./* ~/.config
 
 #############################################
 #            REBOOT SYSTEM                  #
