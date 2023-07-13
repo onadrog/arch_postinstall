@@ -92,14 +92,10 @@ select opt in "${options[@]}"
 do
     printf 'Installing %s helper\n' "$opt"
     sudo pacman -S --noconfirm --needed base-devel
-    git clone https://aur.archlinux.org/"${opt}".git
     while  [ -z "$user" ]; do
         read -rp "Please enter your username to package the aur helper: " user
     done
-    su - "$user"
-    cd "$opt" || exit
-    makepkg -si
-    cd || exit
+    su "$user" -Pc "git clone https://aur.archlinux.org/${opt}.git && cd $opt makepkg -si"
     printf '%s installed\n' "$opt"
     exit
 done
@@ -140,7 +136,7 @@ export EDITOR='nvim'
 #            COPY CONF FILES                #
 #############################################
 
-rsync --exclude=*.sh --exclude=README -avzc ./* ~/.config
+rsync --exclude=*.sh --exclude=README -avzc ./* /home/"$user"/.config
 
 #############################################
 #            REBOOT SYSTEM                  #
