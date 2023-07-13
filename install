@@ -2,7 +2,7 @@
 # Script Name   : install
 # Author        : Sébastien Gordano
 # Date          : 07/2023
-# Version       : 0.2
+# Version       : 1.0
 # Usage         : bash install
 # Description   : Install / configure the basics for the use of WM on Arch linux
 #===========================================================================
@@ -136,10 +136,12 @@ export EDITOR='nvim'
 #            COPY CONF FILES                #
 #############################################
 
-rsync -avzc --exclude=install --exclude=greetd --exclude=README ./* ~/.config
+rsync -avzc --exclude=install --exclude=sway --exclude=greetd --exclude=README ./* ~/.config
 
-if [ "$wm" == "Sway" ]; then
+if [ "$wm" == "sway" ]; then
    cp -r ./greetd ~/.config
+   cp -r ./sway ~/.config
+
 fi
 #############################################
 #            REBOOT SYSTEM                  #

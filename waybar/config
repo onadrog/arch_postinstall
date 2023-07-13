@@ -24,9 +24,6 @@
         "all-outputs": true,
         "format": "{name}: {icon}",
         "format-icons": {
-            "1": "",
-            "2": "",
-            "3": "",
             "urgent": "",
             "focused": "",
             "default": ""
@@ -135,7 +132,6 @@
     },
     "custom/power": {
         "format": "",
-       // "on-click": "swaynag -t warning -m 'Power Menu Options' -b 'Logout' 'swaymsg exit' -b 'Suspend' 'zzz' -b 'Restart' 'shutdown -r now' -b 'Shutdown'  'shutdown -h now'"
-       "on-click": "swaypowerbtn"
+        "on-click": "swaynag -t warning -m 'Power Menu Options' -b 'Logout' 'swaymsg exit' -b 'Suspend' 'zzz' -b 'Restart' 'shutdown -r now' -b 'Shutdown'  'shutdown -h now'"
     }
 }
