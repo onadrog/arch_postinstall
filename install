@@ -54,15 +54,14 @@ done
 #               BASIC INSTALL               #
 #############################################
 
-sudo pacman -Syu --noconfirm && \
-    pacman -S --noconfirm \
-    bringhtnessctl mvp \
+sudo pacman -Syu --noconfirm \
+    brightnessctl vlc streamlink \
     playerctl neovim reflector \
-    cups docker fstrim \
+    cups docker util-linux \
     ufw keepassxc swaylock swayidle \
     base-devel zsh nodejs npm pnpm \
-    foot pcmanfm waybar  \
-    clipman otf-font-awesome gammastep \
+    pcmanfm waybar \
+    wl-clipboard otf-font-awesome gammastep \
     dnscrypt-proxy chezmoi \
     polkit-kde-agent firefox wofi \
     htop lightdm lightdm-gtk-greeter
@@ -74,11 +73,11 @@ fi
 if [ "$wm" == "sway" ]; then
     sudo pacman -S --noconfirm \
         sway xdg-desktop-portal-gtk \
-        xdg-desktop-portal-wlr swaybg
+        xdg-desktop-portal-wlr swaybg foot
 else
     sudo pacman -S --noconfirm \
         hyprland qt5-wayland xdg-desktop-portal-hyprland \
-        hyprpaper
+        hyprpaper kitty
 fi
 
 #############################################
@@ -137,7 +136,7 @@ export EDITOR='nvim'
 #            COPY CONF FILES                #
 #############################################
 
-rsync -avzc --exclude=*.sh --exclude=greetd --exclude=README ./* ~/.config
+rsync -avzc --exclude=install --exclude=greetd --exclude=README ./* ~/.config
 
 if [ "$wm" == "Sway" ]; then
    cp -r ./greetd ~/.config
