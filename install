@@ -65,7 +65,7 @@ sudo pacman -Syu --noconfirm && \
     clipman otf-font-awesome gammastep \
     dnscrypt-proxy chezmoi \
     polkit-kde-agent firefox wofi \
-    htop
+    htop lightdm lightdm-gtk-greeter
    
 if [ "$is_laptop" == "Yes" ]; then
     sudo -S --noconfirm tlp upower
@@ -93,12 +93,12 @@ select opt in "${options[@]}"
 do
     printf 'Installing %s helper\n' "$opt"
     sudo pacman -S --noconfirm --needed base-devel
-    while  [ -z "$user" ]; do
-        read -rp "Please enter your username to package the aur helper: " user
-    done
-    su "$user" -Pc "cd /home/$user && git clone https://aur.archlinux.org/${opt}.git && cd $opt && makepkg -si"
+    git clone https://aur.archlinux.org/${opt}.git
+    cd $opt || exit
+    makepkg -si"
     printf '%s installed\n' "$opt"
-    exit
+    cd
+    break;
 done
 
 
@@ -118,7 +118,7 @@ options edns0
 
 printf 'Enabling systemd services...\n'
 
-sudo systemctl enable reflector.timer cups.service fstrim.service docker.service ufw.service NetworkManager.service dnscrypt-proxy.service
+sudo systemctl enable reflector.timer cups.service fstrim.service docker.service ufw.service NetworkManager.service dnscrypt-proxy.service lightdm.service
 
 if [ "$is_laptop" == "Yes" ];
 then
@@ -137,13 +137,16 @@ export EDITOR='nvim'
 #            COPY CONF FILES                #
 #############################################
 
-rsync --exclude=*.sh --exclude=README -avzc ./* /home/"$user"/.config
+rsync -avzc --exclude=*.sh --exclude=greetd --exclude=README ./* ~/.config
 
+if [ "$wm" == "Sway" ]; then
+   cp -r ./greetd ~/.config
+done
 #############################################
 #            REBOOT SYSTEM                  #
 #############################################
 
-printf "Base Sway Installation done, time to rice it up.
+printf "Base installation done, time to rice it up.
 System will now reboot...
 "
 reboot
