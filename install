@@ -91,9 +91,9 @@ options=("yay" "paru")
 select opt in "${options[@]}"
 do
     printf 'Installing %s helper\n' "$opt"
+    sudo pacman -S --noconfirm --needed -base-devel
     git clone https://aur.archlinux.org/"${opt}".git
-    cd "$opt" || exit
-    makepkg -si;
+    chroot --userspec=1000:1000 "$opt" makepkg -si
     cd || exit
     printf '%s installed\n' "$opt"
     break ;
