@@ -15,7 +15,7 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term alacritty 
+set $term foot
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
@@ -24,7 +24,7 @@ set $term alacritty
 exec gammastep -c ~/.config/gammastep/config.ini
 #exec_always gammastep-indicator
 set $opacity 0.8
-set $menu bemenu-run
+set $menu wofi
 
 # exec_always nm-applet --indicator
 
@@ -81,8 +81,6 @@ input "type:touchpad" {
         events disabled_on_external_mouse
         drag enable
 }
-
-for_window [app_id="swaypowerbtn"] floating enable, move center, opacity 0.6
 
 ### nmtui floating
 
@@ -273,9 +271,5 @@ bar {
 
 workspace number 1
 exec $term
-workspace number 2
-exec brave
-exec sleep 0.3s
-workspace number 1
 
 include /etc/sway/config.d/*

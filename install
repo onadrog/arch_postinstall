@@ -1,0 +1,150 @@
+#!/usr/bin/env bash
+# Script Name   : install
+# Author        : Sébastien Gordano
+# Date          : 07/2023
+# Version       : 0.2
+# Usage         : bash install
+# Description   : Install / configure the basics for the use of WM on Arch linux
+#===========================================================================
+printf "
+   ___                  _                 
+  / _ \ _ __   __ _  __| |_ __ ___   __ _ 
+ | | | | '_ \ / _' |/ _' | '__/ _ \ / _' |
+ | |_| | | | | (_| | (_| | | | (_) | (_| |
+  \___/|_| |_|\__,_|\__,_|_|  \___/ \__, |
+       | | | | ___| |_ __   ___ _ __|___/ 
+       | |_| |/ _ \ | '_ \ / _ \ '__|     
+       |  _  |  __/ | |_) |  __/ |        
+       |_| |_|\___|_| .__/ \___|_|        
+                    |_|                   \n"
+printf "Oi mate, Welcome to Onadrog's helper !\n\n"
+printf 'Are ya running a laptop ?\n'
+PS3='Make a choice (e.g: 1): '
+options=("Yes" "No")
+
+select opt in "${options[@]}"
+do
+  is_laptop="$opt"
+  break;
+done
+
+
+
+#############################################
+#                WM CHOICE                  #
+#############################################
+printf "
+  ____  _      _                                           _                 
+ |  _ \(_) ___| | __  _   _  ___  _   _ _ __   _ __   ___ (_)___  ___  _ __  
+ | |_) | |/ __| |/ / | | | |/ _ \| | | | '__| | '_ \ / _ \| / __|/ _ \| '_ \ 
+ |  __/| | (__|   <  | |_| | (_) | |_| | |    | |_) | (_) | \__ \ (_) | | | |
+ |_|   |_|\___|_|\_\  \__, |\___/ \__,_|_|    | .__/ \___/|_|___/\___/|_| |_|
+                      |___/                   |_|                            \n"
+
+PS3='Make a choice(e.g: 1): '
+options=("sway" "hyprland")
+
+select opt in "${options[@]}"
+do
+    wm="$opt"
+    break;
+done
+
+#############################################
+#               BASIC INSTALL               #
+#############################################
+
+sudo pacman -Syu --noconfirm && \
+    pacman -S --noconfirm \
+    bringhtnessctl mvp \
+    playerctl neovim reflector \
+    cups docker fstrim \
+    ufw keepassxc swaylock swayidle \
+    base-devel zsh nodejs npm pnpm \
+    foot pcmanfm waybar  \
+    clipman otf-font-awesome gammastep \
+    dnscrypt-proxy chezmoi \
+    polkit-kde-agent firefox wofi
+   
+if [ "$is_laptop" == "Yes" ]; then
+    sudo -S --noconfirm tlp upower
+fi
+
+if [ "$wm" == "sway" ]; then
+    sudo pacman -S --noconfirm \
+        sway xdg-desktop-portal-gtk \
+        xdg-desktop-portal-wlr swaybg
+else
+    sudo pacman -S --noconfirm \
+        hyprland qt5-wayland xdg-desktop-portal-hyprland \
+        hyprpaper
+fi
+
+#############################################
+#             INSTALL AUR HELPER            #
+#############################################
+
+printf "Choose an AUR helper from the list: "
+PS3='Make a choice: (e.g: 1, 2)'
+options=("yay" "paru") 
+
+select opt in "${options[@]}"
+do
+    printf 'Installing %s helper' "$opt"
+    git clone https://aur.archlinux.org/"${opt}".git
+    cd "$opt" || exit
+    makepkg -si;
+    cd || exit
+    $opt -Y --gendb
+    $opt -Syu --devel
+    $opt -S --noconfirm brave greetd gtkgreet
+    printf '%s installed' "$opt"
+    break ;
+done
+
+
+#############################################
+#               DNSCRYPT SERVICES           #
+#############################################
+
+
+sudo printf "nameserver 127.0.0.1
+nameserver ::1
+options edns0
+" | tee /etc/resolv.conf && chattr +i /etc/resolv.conf
+
+#############################################
+#               SYSTEMD SERVICES            #
+#############################################
+
+printf 'Enabling systemd services...\n'
+
+sudo systemctl enable reflector.timer cups.service fstrim.service docker.service ufw.service NetworkManager.service dnscrypt-proxy.service
+
+if [ "$is_laptop" == "Yes" ];
+then
+  sudo systemctl enable tlp upower
+fi
+
+#############################################
+#                CONF SHELL                 #
+#############################################
+
+printf "alias clean='sudo pacman -Qtdq | sudo pacman -Rns -'
+export EDITOR='nvim'
+" >> ~/.bashrc
+
+#############################################
+#            COPY CONF FILES                #
+#############################################
+
+rsync --exclude=*.sh --exclude=README -avzc ./* ~/.config
+
+#############################################
+#            REBOOT SYSTEM                  #
+#############################################
+
+printf "Base Sway Installation done, time to rice it up.
+System will now reboot...
+"
+reboot
