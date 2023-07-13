@@ -93,11 +93,11 @@ select opt in "${options[@]}"
 do
     printf 'Installing %s helper\n' "$opt"
     sudo pacman -S --noconfirm --needed base-devel
-    git clone https://aur.archlinux.org/${opt}.git
-    cd $opt || exit
-    makepkg -si"
+    git clone https://aur.archlinux.org/"${opt}".git
+    cd "$opt" || exit
+    makepkg -si
     printf '%s installed\n' "$opt"
-    cd
+    cd || exit
     break;
 done
 
@@ -141,7 +141,7 @@ rsync -avzc --exclude=*.sh --exclude=greetd --exclude=README ./* ~/.config
 
 if [ "$wm" == "Sway" ]; then
    cp -r ./greetd ~/.config
-done
+fi
 #############################################
 #            REBOOT SYSTEM                  #
 #############################################
