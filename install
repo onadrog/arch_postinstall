@@ -93,10 +93,15 @@ do
     printf 'Installing %s helper\n' "$opt"
     sudo pacman -S --noconfirm --needed base-devel
     git clone https://aur.archlinux.org/"${opt}".git
-    chroot --userspec=1000:1000 "$opt" makepkg -si
+    while  [ -z "$user" ]; do
+        read -rp "Please enter your username to package the aur helper: " user
+    done
+    su - "$user"
+    cd "$opt" || exit
+    makepkg -si
     cd || exit
     printf '%s installed\n' "$opt"
-    break ;
+    exit
 done
 
 
