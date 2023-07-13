@@ -64,7 +64,8 @@ sudo pacman -Syu --noconfirm && \
     foot pcmanfm waybar  \
     clipman otf-font-awesome gammastep \
     dnscrypt-proxy chezmoi \
-    polkit-kde-agent firefox wofi
+    polkit-kde-agent firefox wofi \
+    htop
    
 if [ "$is_laptop" == "Yes" ]; then
     sudo -S --noconfirm tlp upower
@@ -95,7 +96,7 @@ do
     while  [ -z "$user" ]; do
         read -rp "Please enter your username to package the aur helper: " user
     done
-    su "$user" -Pc "git clone https://aur.archlinux.org/${opt}.git && cd $opt makepkg -si"
+    su "$user" -Pc "cd /home/$user && git clone https://aur.archlinux.org/${opt}.git && cd $opt && makepkg -si"
     printf '%s installed\n' "$opt"
     exit
 done
@@ -130,7 +131,7 @@ fi
 
 printf "alias clean='sudo pacman -Qtdq | sudo pacman -Rns -'
 export EDITOR='nvim'
-" >> ~/.bashrc
+" | tee ~/.bashrc
 
 #############################################
 #            COPY CONF FILES                #
