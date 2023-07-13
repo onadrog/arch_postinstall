@@ -5,5 +5,5 @@
 ### usage
 
 ```bash
-$ ./insall
+$ ./install
 ```
