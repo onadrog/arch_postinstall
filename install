@@ -84,21 +84,18 @@ fi
 #             INSTALL AUR HELPER            #
 #############################################
 
-printf "Choose an AUR helper from the list: "
+printf "Choose an AUR helper from the list: \n"
 PS3='Make a choice: (e.g: 1, 2)'
 options=("yay" "paru") 
 
 select opt in "${options[@]}"
 do
-    printf 'Installing %s helper' "$opt"
+    printf 'Installing %s helper\n' "$opt"
     git clone https://aur.archlinux.org/"${opt}".git
     cd "$opt" || exit
     makepkg -si;
     cd || exit
-    $opt -Y --gendb
-    $opt -Syu --devel
-    $opt -S --noconfirm brave greetd gtkgreet
-    printf '%s installed' "$opt"
+    printf '%s installed\n' "$opt"
     break ;
 done
 
