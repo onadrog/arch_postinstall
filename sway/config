@@ -33,7 +33,7 @@ exec wl-paste -t text --watch clipman store --no-persist
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg ~/Pictures/poseidon.jpg fill
+# output * bg ~/Pictures/poseidon.jpg fill
 
 
 #
@@ -66,7 +66,7 @@ exec mako
 
 ### Input configuration
 input "type:keyboard" {
-        xkb_layout fr,us
+        xkb_layout fr
         xkb_numlock enable
         xkb_options grp:alt_shift_toggle
 }
@@ -121,7 +121,7 @@ bindsym $mod+less exec pcmanfm
 floating_modifier $mod normal
 
 # Clipman history
-bindsym $mod+Alt+h exec clipman pick -t bemenu
+bindsym $mod+Alt+h exec clipman pick -t wofi
 
 # Reload the configuration file
 bindsym $mod+Shift+c reload

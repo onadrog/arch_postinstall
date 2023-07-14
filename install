@@ -19,13 +19,22 @@ printf "
                     |_|                   \n"
 printf "Oi mate, Welcome to Onadrog's helper !\n\n"
 printf 'Are ya running a laptop ?\n'
-PS3='Make a choice (e.g: 1): '
+PS3='Make a choice (e.g. 1): '
 options=("Yes" "No")
 
 select opt in "${options[@]}"
 do
-  is_laptop="$opt"
-  break;
+    case $opt in
+        "Yes")
+            is_laptop="$opt"
+            break;
+            ;;
+        "No")
+            is_laptop="$opt"
+            break
+            ;;
+        *) echo "Invalid choice";;
+  esac
 done
 
 
@@ -41,13 +50,22 @@ printf "
  |_|   |_|\___|_|\_\  \__, |\___/ \__,_|_|    | .__/ \___/|_|___/\___/|_| |_|
                       |___/                   |_|                            \n"
 
-PS3='Make a choice(e.g: 1): '
+PS3='Make a choice(e.g. 1): '
 options=("sway" "hyprland")
 
 select opt in "${options[@]}"
 do
-    wm="$opt"
-    break;
+    case $opt in
+        "sway")
+            wm="$opt"
+            break;
+            ;;
+        "hyprland")
+            wm="$opt"
+            break
+            ;;
+        *) echo "Invalid choice";;
+  esac
 done
 
 #############################################
@@ -59,12 +77,13 @@ sudo pacman -Syu --noconfirm \
     playerctl neovim reflector \
     cups docker util-linux \
     ufw keepassxc swaylock swayidle \
-    base-devel zsh nodejs npm pnpm \
+    base-devel nodejs npm pnpm \
     pcmanfm waybar \
     wl-clipboard otf-font-awesome gammastep \
     dnscrypt-proxy chezmoi \
     polkit-kde-agent firefox wofi \
-    htop lightdm lightdm-gtk-greeter
+    htop lightdm lightdm-gtk-greeter \
+    rsync foot
    
 if [ "$is_laptop" == "Yes" ]; then
     sudo -S --noconfirm tlp upower
@@ -73,33 +92,52 @@ fi
 if [ "$wm" == "sway" ]; then
     sudo pacman -S --noconfirm \
         sway xdg-desktop-portal-gtk \
-        xdg-desktop-portal-wlr swaybg foot
+        xdg-desktop-portal-wlr swaybg
 else
     sudo pacman -S --noconfirm \
         hyprland qt5-wayland xdg-desktop-portal-hyprland \
-        hyprpaper kitty
+        hyprpaper
 fi
 
 #############################################
 #             INSTALL AUR HELPER            #
 #############################################
-
-printf "Choose an AUR helper from the list: \n"
-PS3='Make a choice: (e.g: 1, 2)'
-options=("yay" "paru") 
+printf "Would you like to install an AUR helper ?
+"
+PS3='Make a choice: (e.g. 1): '
+options=("Yes" "No")
 
 select opt in "${options[@]}"
 do
-    printf 'Installing %s helper\n' "$opt"
-    sudo pacman -S --noconfirm --needed base-devel
-    git clone https://aur.archlinux.org/"${opt}".git
-    cd "$opt" || exit
-    makepkg -si
-    printf '%s installed\n' "$opt"
-    cd || exit
-    break;
+    case $opt in
+        "Yes")
+            want_aur="$opt"
+            break
+            ;;
+        "No")
+            want_aur="$opt"
+            break;;
+    esac
 done
 
+if [ "$want_aur" == "Yes" ]; then
+    printf "Choose an AUR helper from the list: \n"
+    PS3='Make a choice: (e.g. 1): '
+    options=("yay" "paru") 
+
+    select opt in "${options[@]}"
+    do
+        printf 'Installing %s helper\n' "$opt"
+        sudo pacman -S --noconfirm --needed base-devel
+        git clone https://aur.archlinux.org/"${opt}".git
+        cd "$opt" || exit
+        makepkg -si
+        printf '%s installed\n' "$opt"
+        cd || exit
+        break;
+    done
+
+fi
 
 #############################################
 #               DNSCRYPT SERVICES           #
@@ -136,12 +174,12 @@ export EDITOR='nvim'
 #            COPY CONF FILES                #
 #############################################
 
-rsync -avzc --exclude=install --exclude=sway --exclude=greetd --exclude=README ./* ~/.config
+rsync -avzc --exclude=install --exclude=hypr --exclude=sway --exclude=README.md ./* ~/.config
 
 if [ "$wm" == "sway" ]; then
-   cp -r ./greetd ~/.config
-   cp -r ./sway ~/.config
-
+   rsync -avcz ./sway ~/.config
+else
+    rsync -avcz ./hypr ~/.config
 fi
 #############################################
 #            REBOOT SYSTEM                  #
